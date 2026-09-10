@@ -1,0 +1,147 @@
+SEEBEYOND - FINAL VALIDATION SUMMARY
+===================================
+
+1. DR CLASSIFICATION
+--------------------
+
+Dataset:
+APTOS2019
+
+Held-out test images:
+554
+
+Test Accuracy:
+81.95%
+
+Macro Precision:
+69.48%
+
+Macro Recall:
+61.59%
+
+Macro F1:
+63.78%
+
+
+2. CLASS-WISE PERFORMANCE
+-------------------------
+
+No DR:
+Precision = 98.50%
+Recall    = 96.32%
+F1        = 97.40%
+
+Mild:
+Precision = 67.44%
+Recall    = 51.79%
+F1        = 58.59%
+
+Moderate:
+Precision = 67.68%
+Recall    = 88.74%
+F1        = 76.79%
+
+Severe:
+Precision = 46.15%
+Recall    = 20.00%
+F1        = 27.91%
+
+Proliferative DR:
+Precision = 67.65%
+Recall    = 51.11%
+F1        = 58.23%
+
+
+3. SEGMENTATION VALIDATION
+--------------------------
+
+Blood Vessel:
+Dice = 58.70%
+IoU  = 41.69%
+
+Hard Exudate:
+Dice = 18.89%
+IoU  = 11.28%
+
+Haemorrhage:
+Dice = 16.09%
+IoU  = 9.35%
+
+Microaneurysm:
+Dice = 35.79%
+IoU  = 22.31%
+
+Soft Exudate:
+Dice = 5.68%
+IoU  = 3.33%
+
+Overall Lesion:
+Dice = 19.11%
+IoU  = 11.57%
+
+
+4. SYSTEM VALIDATION
+--------------------
+
+Stage 1 - Image Quality Assessment:
+PASSED
+
+Stage 2 - Retinal Lesion Segmentation:
+PASSED
+
+Stage 3 - DR Classification:
+PASSED
+
+Stage 4 - End-to-End Integration:
+PASSED
+
+Stage 5 - Validation:
+PASSED
+
+Stage 6 - GUI:
+PASSED
+
+Save Report:
+PASSED
+
+
+5. KNOWN LIMITATION
+-------------------
+
+The current DR classifier has weak performance
+for the Severe DR class.
+
+Severe DR recall:
+20.00%
+
+The classifier may confuse Severe DR with
+Moderate or Proliferative DR.
+
+
+6. SEGMENTATION DISCLAIMER
+--------------------------
+
+Segmentation outputs are AI localization and
+explainability signals.
+
+They are NOT independent clinical diagnoses.
+
+The SeeBeyond system does not replace
+professional eye care.
+
+
+7. CONCLUSION
+-------------
+
+SeeBeyond successfully integrates image quality
+assessment, diabetic retinopathy classification,
+retinal lesion localization, explainable AI outputs,
+and automated screening report generation into a
+single end-to-end prototype.
+
+The system achieved 81.95% accuracy on the held-out
+APTOS2019 test set.
+
+The current system is intended as an AI-assisted
+screening and research prototype, not as a standalone
+clinical diagnostic system.

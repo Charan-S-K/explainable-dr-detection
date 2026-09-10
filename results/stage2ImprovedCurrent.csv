@@ -1,0 +1,6 @@
+Component,Dice,IoU,Sensitivity,Specificity
+Blood Vessel,0.587,0.4169,0.7645,0.9168
+Hard Exudate,0.1892,0.1136,0.2857,0.9966
+Haemorrhage,0.1609,0.0935,0.4608,0.9499
+Microaneurysm,0.3579,0.2231,0.4309,0.9992
+Soft Exudate,0.1316,0.0891,0.3686,0.9579

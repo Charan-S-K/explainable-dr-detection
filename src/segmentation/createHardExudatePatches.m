@@ -1,3 +1,4 @@
+
 %% SeeBeyond - Create Hard Exudate Training Patches
 
 clearvars;
@@ -36,7 +37,6 @@ end
 if exist(patchMaskDir,'dir')
     rmdir(patchMaskDir,'s');
 end
-
 mkdir(patchImageDir);
 mkdir(patchMaskDir);
 

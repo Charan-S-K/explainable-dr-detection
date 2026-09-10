@@ -1,0 +1,6 @@
+Class,Precision,Recall,F1
+No_DR,0.490974729241877,1,0.658595641646489
+Mild,0,0,0
+Moderate,0,0,0
+Severe,0,0,0
+Proliferative_DR,0,0,0
