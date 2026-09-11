@@ -15,6 +15,7 @@ rehash;
 
 selectedImagePath = "";
 lastResult = [];
+lastRisk = [];
 
 %% ============================================================
 % THEME
@@ -200,6 +201,31 @@ uilabel(drCard, ...
     'Text','Probability of the predicted class', ...
     'FontSize',10, ...
     'FontColor',SECONDARY);
+
+% ============================================================
+% AI SCREENING RISK ASSESSMENT
+% ============================================================
+
+riskTitle = uilabel(drCard, ...
+    'Position',[22 15 300 20], ...
+    'Text','AI RISK ASSESSMENT', ...
+    'FontSize',10, ...
+    'FontWeight','bold', ...
+    'FontColor',SECONDARY);
+
+riskLevelValue = uilabel(drCard, ...
+    'Position',[150 10 190 28], ...
+    'Text','WAITING', ...
+    'FontSize',16, ...
+    'FontWeight','bold', ...
+    'FontColor',SECONDARY);
+
+riskScoreValue = uilabel(drCard, ...
+    'Position',[440 15 250 22], ...
+    'Text','Score: -- / 100', ...
+    'FontSize',11, ...
+    'FontWeight','bold', ...
+    'FontColor',TEXT);
 
 %% ============================================================
 % BOTTOM LEFT - CLASSIFICATION
@@ -424,6 +450,7 @@ function selectImage(~,~)
             };
 
         lastResult = [];
+    lastRisk = [];
 
     catch ME
 
@@ -465,7 +492,35 @@ function analyzeImage(~,~)
 
         result = runSeeBeyond(char(selectedImagePath));
 
+        % ====================================================
+        % AI SCREENING RISK ASSESSMENT
+        % ====================================================
+
+        risk = assessScreeningRisk(result);
+
         lastResult = result;
+        lastRisk = risk;
+
+        % ====================================================
+        % AI SCREENING RISK ASSESSMENT
+        % ====================================================
+
+        riskLevelValue.Text = char(risk.level);
+        riskScoreValue.Text = sprintf('Score: %d / 100',risk.score);
+
+        if strcmpi(char(risk.level),'LOW')
+
+            riskLevelValue.FontColor = GREEN;
+
+        elseif strcmpi(char(risk.level),'MODERATE')
+
+            riskLevelValue.FontColor = ORANGE;
+
+        else
+
+            riskLevelValue.FontColor = RED;
+
+        end
 
         % ====================================================
         % IMAGE / OVERLAY
@@ -785,7 +840,8 @@ function saveReport(~,~)
 
         generateSeeBeyondPDF(lastResult, ...
             char(selectedImagePath), ...
-            fullPath);
+            fullPath, ...
+            lastRisk);
 
         uialert(fig, ...
             sprintf('PDF report saved successfully:\n%s',fullPath), ...

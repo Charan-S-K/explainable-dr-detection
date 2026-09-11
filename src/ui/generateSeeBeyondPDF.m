@@ -1,6 +1,10 @@
-function generateSeeBeyondPDF(result, imagePath, pdfPath)
+function generateSeeBeyondPDF(result, imagePath, pdfPath, risk)
 % generateSeeBeyondPDF
 % Creates a SeeBeyond AI retinal screening PDF report.
+
+if nargin < 4 || isempty(risk)
+    risk = assessScreeningRisk(result);
+end
 
 import mlreportgen.dom.*
 
@@ -313,8 +317,10 @@ try
 
         if isfield(seg,'retinaMask')
             totalPixels = nnz(seg.retinaMask);
-        else
+        elseif isfield(seg,'vesselMask')
             totalPixels = numel(seg.vesselMask);
+        else
+            totalPixels = 1;
         end
 
         if totalPixels == 0
@@ -349,13 +355,56 @@ try
 
     end
 
-    append(doc,mlreportgen.dom.Table(featureTable));
+    ft = mlreportgen.dom.Table(featureTable);
+    ft.StyleName = 'Table';
+    ft.Width = '6.5in';
+
+    append(doc,ft);
+
+    % =====================================================
+    % RISK ASSESSMENT
+    % =====================================================
+
+    append(doc,heading('7. AI SCREENING RISK ASSESSMENT'));
+
+    riskLevel = getValue(risk,'level','Not available');
+    riskScore = getValue(risk,'scoreText','Not available');
+    riskReason = getValue(risk,'reason','Not available');
+    riskRecommendation = getValue(risk,'recommendation','Not available');
+    riskGrade = getValue(risk,'drGradeText',grade);
+    riskConfidence = getValue(risk,'confidenceText',confidence);
+
+    riskTable = {
+        'Parameter','Value';
+        'Risk Level',riskLevel;
+        'Risk Score',riskScore;
+        'DR Grade',riskGrade;
+        'AI Confidence',riskConfidence;
+        'Assessment Reason',riskReason;
+        'Recommended Action',riskRecommendation
+        };
+
+    rt = mlreportgen.dom.Table(riskTable);
+    rt.StyleName = 'Table';
+    rt.Width = '6.5in';
+
+    append(doc,rt);
+
+    riskNote = mlreportgen.dom.Paragraph( ...
+        ['This risk assessment is AI-assisted screening guidance. ' ...
+         'It is intended to support screening and prioritization ' ...
+         'and is not a medical diagnosis.']);
+
+    riskNote.FontSize = '9pt';
+    riskNote.Color = '#444444';
+
+    append(doc,riskNote);
 
     % =====================================================
     % INTERPRETATION
     % =====================================================
 
-    append(doc,heading('7. AI INTERPRETATION'));
+    append(doc,heading('8. AI INTERPRETATION'));
 
     interpretation = sprintf( ...
         ['SeeBeyond AI classified the submitted retinal image as ' ...
@@ -371,7 +420,7 @@ try
     % RECOMMENDATION
     % =====================================================
 
-    append(doc,heading('8. RECOMMENDED NEXT STEP'));
+    append(doc,heading('9. RECOMMENDED NEXT STEP'));
 
     recommendation = [ ...
         'Clinical Review Recommended. ' ...
@@ -388,7 +437,7 @@ try
     % DISCLAIMER
     % =====================================================
 
-    append(doc,heading('9. MEDICAL DISCLAIMER'));
+    append(doc,heading('10. MEDICAL DISCLAIMER'));
 
     disclaimer = [ ...
         'SeeBeyond is an AI-assisted retinal screening system ' ...
